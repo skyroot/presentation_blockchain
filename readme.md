@@ -28,6 +28,28 @@
 
   ​
 
+  ​
+
+### 使用到的软件及工具
+
+remix：
+
+https://remix.ethereum.org/
+
+broswer-solidity：
+
+http://chriseth.github.io/browser-solidity/#version=soljson-latest.js&optimize=true
+
+geth：
+
+to start our own eth nodes and test network to deploy the smart contract
+
+web3.js:
+
+interact with the geth json-rpc interface and do some evil thing to the contract
+
+
+
 ### 主要内容
 
 区块链技术对互联网安全的冲击（隐私性与匿名性， 促进了勒索木马+肉鸡挖矿+暗网交易等产业链的兴起）
@@ -39,8 +61,6 @@
 主要的观点： 区块链的安全应当受到更高的重视
 
 理由：区块链公有链的运作需要token的激励，因此，可以将该类token视为传统金融与传统技术结合的产物，与传统技术结合，扩大了其安全的攻击面，与传统金融相结合，意味着其攻击收益更高。
-
-
 
 
 
@@ -92,11 +112,54 @@ eccentric technology works with centric platform
 
 1.整数上溢与整数下溢
 
+上溢降低成本
+
+```
+ 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
++ 0x000000000000000000000000000000000001
+----------------------------------------
+= 0x000000000000000000000000000000000000
+```
+
+下溢增加收入
+
+```
+ 0x000000000000000000000000000000000000
+- 0x000000000000000000000000000000000001
+----------------------------------------
+= 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+```
+
+一般使用safemath库可以尽量避免这类问题的产生
+
+
+
 2.伪随机数安全
+
+某些函数将一些伪随机数作为分配用户利益的重要依据，而这些伪随机数往往是可以预测的
+
+block.timestamp/block.difficulity/block.gaslimit 等常常被用作随机数产生的种子，这样的合约很容易被攻击
+
+（演示）
 
 3.竞态条件
 
+对公共变量的访问（balance）没有上锁或采用其他的限制手段，造成了代币可能出现双重支付的情况。
+
+```
+function buy(){
+  if(your money>100){
+  	get your item;
+  }
+  your money = your money - 100;
+}
+```
+
+
+
 4.函数未授权访问
+
+一些敏感操作的函数为做限制，而成为属性为public的函数，可以为大部分的用户所访问
 
 
 
@@ -107,6 +170,36 @@ eccentric technology works with centric platform
 1.51%攻击
 
 2.以太坊短地址攻击
+
+input的数据结构： 4字节 function hash ；32字节address ；32字节number
+
+
+
+举例：
+
+```
+hash : AAAABBBB
+address: CCCCDD00
+number: 00000001
+
+
+对address进行截断：
+hash: AAAABBBB
+address: CCCCDD00
+number: 00000001
+
+最终input数据：
+AAAABBBBAAAABBBB0000000100
+解析结果：
+hash：AAAABBBB
+address： CCCCDD00
+number： 00000100
+
+最终转账的数值扩大2^8 = 256 倍
+
+```
+
+
 
 
 
@@ -153,7 +246,7 @@ eccentric technology works with centric platform
 >
 > miner.setEtherbase(eth.accounts[0])
 >
-> miner.start(1)
+> miner.start(4)
 >
 > ------
 >
@@ -403,20 +496,3 @@ web3.eth.getAccounts().then( e => {
 
 
 
-### 使用到的软件及工具
-
-remix：
-
-https://remix.ethereum.org/
-
-broswer-solidity：
-
-http://chriseth.github.io/browser-solidity/#version=soljson-latest.js&optimize=true
-
-geth：
-
-to start our own eth nodes and test network to deploy the smart contract
-
-web3.js:
-
-interact with the geth json-rpc interface and do some evil thing to the contract

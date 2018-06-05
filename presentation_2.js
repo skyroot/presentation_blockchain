@@ -7,7 +7,7 @@ web3.setProvider(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
 // this is real
 var abi = [{"constant":false,"inputs":[{"name":"count","type":"uint256"}],"name":"consumption","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"guess","type":"uint256"}],"name":"bet","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[],"name":"paolu","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[],"name":"init","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"","type":"string"},{"indexed":false,"name":"","type":"uint256"}],"name":"LogUint","type":"event"}];
 
-var address = "0x4ffff04ec6f32c97a8f6412528d13975f4ca6e5c";
+var address = "0x2931c3f77107a384d1defd597fdbd93cf291b3b5";
 
 // 通过ABI和地址获取已部署的合约对象
 var casino = new web3.eth.Contract(abi,address);
